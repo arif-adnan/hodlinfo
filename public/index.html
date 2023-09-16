@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Display Data</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+
+  <body>
+    <div style="padding-top: 20px">
+      <nav class="navbar navbar-expand-lg navbar-light bg-transparent px-lg-5">
+        <!-- nav brand left -->
+        <a class="navbar-brand" href="#"
+          ><img
+            src="./assets/HODLINFO.png"
+            class="img-fluid"
+            style="width: 270px"
+            alt="Brand Logo"
+        /></a>
+
+        <!-- centered buttons -->
+        <div class="navbar-nav mx-auto">
+          <div class="nav-item p-3">
+            <select
+              class="p-2"
+              style="
+                border: none;
+                font-weight: bold;
+                color: white;
+                border-radius: 10px;
+                background-color: #2e3241;
+              "
+            >
+              <option value="INR">INR</option>
+            </select>
+          </div>
+          <div class="nav-item p-3">
+            <select
+              class="p-2"
+              style="
+                border: none;
+                font-weight: bold;
+                color: white;
+                border-radius: 10px;
+                background-color: #2e3241;
+              "
+            >
+              <option value="INR">ZEC</option>
+              <option value="INR">ETH</option>
+              <option value="INR">USDT</option>
+              <option value="INR">XRP</option>
+              <option value="INR">TRX</option>
+              <option value="INR">DASH</option>
+              <option value="INR">BTC</option>
+            </select>
+          </div>
+          <div class="nav-item p-3">
+            <a
+              class="nav-link px-3"
+              style="
+                background-color: #2e3241;
+                color: white;
+                border-radius: 10px;
+              "
+              href="#"
+              >BUY BTC</a
+            >
+          </div>
+        </div>
+
+        <!-- right side buttons -->
+        <div class="navbar-nav">
+          <button
+            class="btn btn-primary mx-2"
+            style="background-color: #3dc6c1; border: none; color: white"
+          >
+            <img
+              class="img-fluid p-2"
+              style="width: 40px"
+              src="./assets/telegram.png"
+              alt=""
+            />Connect Telegram
+          </button>
+          <div
+            class="mt-2"
+            style="
+              width: 30px;
+              height: 30px;
+              background-color: #3dc6c1;
+              border-radius: 50%;
+            "
+          ></div>
+        </div>
+      </nav>
+
+      <div
+        class="row d-flex justify-content-center text-secondary p-2"
+        style="font-size: 30px"
+      >
+        Best Price to Trade
+      </div>
+      <div class="row p-4">
+        <div class="col text-center">
+          <h1 style="color: #3dc6c1">0.63 %</h1>
+          <h6 class="text-secondary">5 Mins</h6>
+        </div>
+        <div class="col text-center">
+          <h1 style="color: #3dc6c1">0.88 %</h1>
+          <h6 class="text-secondary">5 Hour</h6>
+        </div>
+        <div class="col text-center" style="color: white">
+          <h1 class="fw-bold" ; style="font-size: 40px">₹24,20,302</h1>
+          <h6 class="text-secondary">
+            Average BTC/INR net price including commission
+          </h6>
+        </div>
+        <div class="col text-center">
+          <h1 style="color: #3dc6c1">2.28 %</h1>
+          <h6 class="text-secondary">1 Day</h6>
+        </div>
+        <div class="col text-center">
+          <h1 style="color: #3dc6c1">12.73 %</h1>
+          <h6 class="text-secondary">7 Days</h6>
+        </div>
+      </div>
+
+      <table
+        class="table table-borderless table-dark text-center table-striped mx-auto"
+        style="width: 96%"
+      >
+        <thead style="font-size: 40px; font-weight: bolder">
+          <tr>
+            <th style="cursor: pointer; color: red" scope="col">Name</th>
+            <th style="cursor: pointer; color: red" scope="col">Last</th>
+            <th style="cursor: pointer; color: red" scope="col">Buy</th>
+            <th style="cursor: pointer; color: red" scope="col">Sell</th>
+            <th style="cursor: pointer; color: red" scope="col">Volume</th>
+            <th style="cursor: pointer; color: red" scope="col">Base Unit</th>
+          </tr>
+        </thead>
+        <tbody
+          id="dataContainer"
+          style="font-size: 30px; background-color: #2e3241"
+        >
+          <tr style="margin-bottom: 10px; font-size: 30px">
+            <!-- table data -->
+          </tr>
+        </tbody>
+      </table>
+      <hr style="color: white" />
+
+      <footer class="text-secondary fw-bold">
+        <div class="container-fluid">
+          <div class="d-flex justify-content-between">
+            <div class="text-right">
+              <span style="margin-right: 8px">Copyright &copy; 2019</span>
+              <span>HodlInfo.com</span>
+            </div>
+            <div>
+              <p class="text-right">Support</p>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      // fetch & display data
+      async function fetchData() {
+        try {
+          const response = await fetch("/get-stored-data");
+          const data = await response.json();
+
+          // display the data in the table
+          const table = document.querySelector("table");
+          data.forEach((ticker) => {
+            const row = table.insertRow();
+            const values = [
+              ticker.name,
+              ticker.last,
+              ticker.buy,
+              ticker.sell,
+              ticker.volume,
+              ticker.base_unit,
+            ];
+
+            values.forEach((value) => {
+              const cell = row.insertCell();
+              cell.textContent = value;
+            });
+          });
+        } catch (error) {
+          console.error("Error:", error);
+          document.getElementById("dataContainer").textContent =
+            "An error occurred while fetching data.";
+        }
+      }
+
+      // fatch data on  page load
+      window.onload = fetchData;
+    </script>
+
+    <!-- Bootstrap JavaScript -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
